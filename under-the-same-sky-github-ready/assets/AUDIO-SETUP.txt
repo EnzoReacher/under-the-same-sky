@@ -1,0 +1,14 @@
+AUDIO SETUP
+
+Đặt đúng hai file sau vào thư mục assets:
+
+1. message-for-duyen.mp3
+   - Giọng nói / lời chúc của Hoàng
+   - Nên dài khoảng 30 giây đến 2 phút
+
+2. our-song.mp3
+   - Nhạc nền của hai đứa
+   - Website sẽ tự fade-in sau khi mở khóa
+   - Khi phát voice, nhạc nền tự hạ nhỏ
+
+Không cần sửa code sau khi thêm hai file này.
