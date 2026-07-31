@@ -9,7 +9,7 @@
 <meta http-equiv="Expires" content="0">
 <meta name="description" content="Một món quà nhỏ đi từ Quy Nhơn đến Gothenburg, dành riêng cho em.">
 <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
-<meta name="app-version" content="10.8-final-polish">
+<meta name="app-version" content="10.8.1-epilogue-fix">
 <link rel="canonical" href="https://enzoreacher.github.io/under-the-same-sky/">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <meta property="og:locale" content="vi_VN">
@@ -6099,14 +6099,23 @@ html.adaptive-build.mobile-runtime .modal-card.photo-mode{
 }
 
 .gift-epilogue{
-  position:absolute;
+  position:fixed;
   inset:0;
-  z-index:12;
+  z-index:740;
   display:grid;
   place-content:center;
   justify-items:center;
-  padding:42px 24px;
-  overflow:hidden;
+  width:100%;
+  min-height:100svh;
+  min-height:100dvh;
+  padding:
+    max(30px,env(safe-area-inset-top))
+    24px
+    max(30px,env(safe-area-inset-bottom));
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
   color:#fff8fb;
   text-align:center;
   background:
@@ -6116,6 +6125,9 @@ html.adaptive-build.mobile-runtime .modal-card.photo-mode{
   visibility:hidden;
   pointer-events:none;
   transition:opacity .9s ease,visibility .9s;
+}
+.cinematic-surprise.epilogue-open{
+  overflow:hidden;
 }
 .cinematic-surprise.epilogue-open .cinema-content{
   opacity:0;
@@ -6229,7 +6241,11 @@ html.adaptive-build.mobile-runtime .modal-card.photo-mode{
     height:56px;
   }
   .gift-epilogue{
-    padding:30px 20px;
+    place-content:safe center;
+    padding:
+      max(24px,env(safe-area-inset-top))
+      20px
+      max(24px,env(safe-area-inset-bottom));
   }
   .epilogue-heart{
     font-size:3.8rem;
@@ -6279,7 +6295,7 @@ img{max-width:100%}
 </head>
 <body class="locked welcome-active">
 <a class="skip-link" href="#mainContent">Đi thẳng tới nội dung chính</a>
-<span id="adaptiveBuildStatus" hidden data-build="10.8-final-polish"></span>
+<span id="adaptiveBuildStatus" hidden data-build="10.8.1-epilogue-fix"></span>
 
 <div class="noise"></div><div class="progress" id="progress"></div>
 <canvas id="fx"></canvas>
@@ -8616,6 +8632,8 @@ function openCinematicSurprise(){
   giftEpilogue?.setAttribute("aria-hidden","true");
   cinema.classList.add("show");
   cinema.setAttribute("aria-hidden","false");
+  cinema.scrollTop=0;
+  giftEpilogue.scrollTop=0;
   document.body.classList.add("locked");
 
   try{
@@ -8658,11 +8676,19 @@ $("#reservePhoto").onclick=()=>{
 const lastLineButton=$("#lastLineButton");
 const giftEpilogue=$("#giftEpilogue");
 const epilogueBack=$("#epilogueBack");
+let cinemaScrollBeforeEpilogue=0;
 
 lastLineButton?.addEventListener("click",()=>{
   const cinema=$("#cinematicSurprise");
+  cinemaScrollBeforeEpilogue=cinema.scrollTop;
+  cinema.scrollTo({top:0,left:0,behavior:"auto"});
+  giftEpilogue.scrollTop=0;
   cinema.classList.add("epilogue-open");
   giftEpilogue.setAttribute("aria-hidden","false");
+
+  requestAnimationFrame(()=>{
+    epilogueBack?.focus({preventScroll:true});
+  });
 
   if(!voice.paused){
     voice.pause();
@@ -8678,6 +8704,11 @@ epilogueBack?.addEventListener("click",()=>{
   const cinema=$("#cinematicSurprise");
   cinema.classList.remove("epilogue-open");
   giftEpilogue.setAttribute("aria-hidden","true");
+
+  requestAnimationFrame(()=>{
+    cinema.scrollTo({top:cinemaScrollBeforeEpilogue,left:0,behavior:"auto"});
+    lastLineButton?.focus({preventScroll:true});
+  });
 });
 
 $("#cinemaBack").onclick=()=>{
@@ -8685,6 +8716,8 @@ $("#cinemaBack").onclick=()=>{
   cinema.classList.remove("show","cards-ready","ending-ready","epilogue-open");
   giftEpilogue.setAttribute("aria-hidden","true");
   cinema.setAttribute("aria-hidden","true");
+  cinema.scrollTop=0;
+  giftEpilogue.scrollTop=0;
   document.body.classList.remove("locked");
 };
 

@@ -1,4 +1,4 @@
-# Under the same sky — V10.8 Final Polish
+# Under the same sky — V10.8.1 Epilogue Fix
 
 Một món quà sinh nhật riêng đi từ Quy Nhơn đến Gothenburg.
 
@@ -24,3 +24,10 @@ Một món quà sinh nhật riêng đi từ Quy Nhơn đến Gothenburg.
 GitHub Pages: branch `main`, folder `/(root)`.
 
 `https://enzoreacher.github.io/under-the-same-sky/`
+
+
+## V10.8.1
+
+- Sửa màn “Đọc dòng cuối cùng” xuất hiện ngoài viewport khi cinematic đã cuộn xuống.
+- Epilogue bám trực tiếp theo viewport trên desktop và mobile.
+- Khi quay lại, cinematic trở về đúng vị trí tấm vé.
