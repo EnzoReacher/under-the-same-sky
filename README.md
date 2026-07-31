@@ -1,30 +1,26 @@
-# Duyên Birthday Website — V10.7 Emotional Finale
+# Under the same sky — V10.8 Final Polish
 
-Timeline được giữ nguyên.
+Một món quà sinh nhật riêng đi từ Quy Nhơn đến Gothenburg.
 
-## Lá thư
-- Thêm dòng viết từ Quy Nhơn.
-- Thêm một câu được nhấn mạnh ở giữa thư.
-- Chữ ký kiểu viết tay và con dấu D&H.
-- Khi mở thư, nhạc nền tự hạ để tạo không gian đọc.
+## V10.8
 
-## Nhạc và giọng nói
-- Nhạc nền thử fade-in sau khi nhập đúng mã.
-- Nút nhạc vẫn có thể bật/tắt thủ công.
-- Khi voice note phát, nhạc nền tự hạ nhỏ.
-- Voice note có thanh tiến trình, thời gian và trạng thái.
-- Khi voice kết thúc, nhạc nền tự trở lại.
-- Chỉ cần thêm:
-  - assets/our-song.mp3
-  - assets/message-for-duyen.mp3
+- Sửa hai tài nguyên hoa hồng bị thiếu bằng CSS nhẹ.
+- Thêm favicon riêng.
+- Thêm preview chia sẻ bằng ảnh bóng hai đứa hiện có.
+- Thêm Open Graph, Twitter Card, canonical URL và mô tả chia sẻ.
+- Thêm `robots.txt` và `noindex` để hạn chế công cụ tìm kiếm lập chỉ mục.
+- Thêm skip link, trạng thái voice có `aria-live`, vùng bấm tối thiểu 44px và focus trap cho modal.
+- Giữ nguyên gallery, game, lá thư và đoạn kết của V10.7.
 
-## Đoạn kết
-- Sau khi giữ chỗ cho tấm ảnh tương lai, xuất hiện nút “Đọc dòng cuối cùng”.
-- Màn epilogue kết bằng:
-  “Món quà này kết thúc ở đây.
-   Còn câu chuyện của hai đứa thì chưa.”
+## Audio bổ sung sau
 
-## Thiết bị
-- Vẫn là một bản Adaptive duy nhất.
-- Desktop dùng hiệu ứng đầy đủ.
-- Mobile tự chuyển sang chế độ nhẹ.
+Đặt hai file vào `assets/`:
+
+- `our-song.mp3`
+- `message-for-duyen.mp3`
+
+## Deploy
+
+GitHub Pages: branch `main`, folder `/(root)`.
+
+`https://enzoreacher.github.io/under-the-same-sky/`
