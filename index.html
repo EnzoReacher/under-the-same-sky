@@ -9,7 +9,7 @@
 <meta http-equiv="Expires" content="0">
 <meta name="description" content="Một món quà nhỏ đi từ Quy Nhơn đến Gothenburg, dành riêng cho em.">
 <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
-<meta name="app-version" content="10.8.1-epilogue-fix">
+<meta name="app-version" content="10.8.2-hero-sakura-rain">
 <link rel="canonical" href="https://enzoreacher.github.io/under-the-same-sky/">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <meta property="og:locale" content="vi_VN">
@@ -1779,7 +1779,94 @@ body.locked .botanical{
 .nav{position:absolute;z-index:20;left:6vw;right:6vw;top:22px;display:flex;justify-content:space-between;align-items:center}
 .brand{font-family:"Playfair Display",serif;color:var(--rose);font-size:1.18rem}
 .nav-actions{display:flex;gap:9px}.pill{border:1px solid var(--line);border-radius:999px;padding:10px 14px;background:rgba(255,255,255,.75);backdrop-filter:blur(10px);color:var(--muted)}
-.hero{min-height:100dvh;padding:125px 6vw 70px;display:grid;grid-template-columns:1.05fr .75fr;gap:7vw;align-items:center;background:radial-gradient(circle at 14% 18%,#f9dfe7,transparent 28%),linear-gradient(135deg,#fff,#fff6f9);overflow:hidden}
+.hero{
+  position:relative;
+  isolation:isolate;
+  min-height:100dvh;
+  padding:125px 6vw 70px;
+  display:grid;
+  grid-template-columns:1.05fr .75fr;
+  gap:7vw;
+  align-items:center;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 14% 18%,#f9dfe7,transparent 28%),
+    linear-gradient(135deg,#fff,#fff6f9);
+}
+.hero > .reveal,
+.hero > .photo-frame{
+  position:relative;
+  z-index:2;
+}
+.hero-sakura-rain{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  overflow:hidden;
+  pointer-events:none;
+  contain:layout paint;
+}
+.hero-sakura-petal{
+  position:absolute;
+  top:-13vh;
+  left:var(--x);
+  display:block;
+  width:var(--size);
+  aspect-ratio:1.45;
+  border-radius:78% 22% 72% 28%;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.96) 0 18%,rgba(250,211,224,.94) 48%,rgba(231,133,163,.88) 100%);
+  box-shadow:
+    inset -1px -1px 2px rgba(180,73,110,.16),
+    0 5px 12px rgba(145,55,86,.08);
+  opacity:0;
+  transform-origin:45% 55%;
+  will-change:transform,opacity;
+  animation:heroSakuraFall var(--duration) linear infinite;
+  animation-delay:var(--delay);
+}
+.hero-sakura-petal::after{
+  content:"";
+  position:absolute;
+  width:35%;
+  height:24%;
+  left:18%;
+  top:18%;
+  border-radius:50%;
+  background:rgba(255,255,255,.65);
+  transform:rotate(-18deg);
+}
+@keyframes heroSakuraFall{
+  0%{
+    opacity:0;
+    transform:translate3d(0,-12vh,0) rotate(var(--r0));
+  }
+  8%{opacity:var(--opacity)}
+  34%{
+    transform:translate3d(var(--d1),36vh,0) rotate(calc(var(--r0) + 135deg));
+  }
+  68%{
+    opacity:var(--opacity);
+    transform:translate3d(var(--d2),76vh,0) rotate(calc(var(--r0) + 285deg));
+  }
+  100%{
+    opacity:0;
+    transform:translate3d(var(--d3),118vh,0) rotate(calc(var(--r0) + 470deg));
+  }
+}
+@media(max-width:620px){
+  .hero-sakura-petal{
+    box-shadow:none;
+  }
+  .hero-sakura-petal:nth-child(n+10){
+    display:none;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-sakura-rain{
+    display:none;
+  }
+}
 .hero h1{font-size:clamp(4.2rem,9vw,9rem);line-height:.84;margin:0}.hero h1 em{color:var(--rose)}
 .hero-sub{max-width:580px;margin:28px 0;color:var(--muted);font-size:clamp(1rem,1.5vw,1.18rem);line-height:1.75}
 .hero-line{font-family:"Playfair Display",serif;font-style:italic;color:var(--rose);margin:12px 0 0}
@@ -6295,7 +6382,7 @@ img{max-width:100%}
 </head>
 <body class="locked welcome-active">
 <a class="skip-link" href="#mainContent">Đi thẳng tới nội dung chính</a>
-<span id="adaptiveBuildStatus" hidden data-build="10.8.1-epilogue-fix"></span>
+<span id="adaptiveBuildStatus" hidden data-build="10.8.2-hero-sakura-rain"></span>
 
 <div class="noise"></div><div class="progress" id="progress"></div>
 <canvas id="fx"></canvas>
@@ -6560,6 +6647,24 @@ img{max-width:100%}
 </nav>
 
 <header class="hero" id="top">
+  <div class="hero-sakura-rain" aria-hidden="true">
+    <span class="hero-sakura-petal" style="--x:3%;--size:15px;--duration:19s;--delay:-12s;--opacity:.68;--r0:18deg;--d1:42px;--d2:-18px;--d3:30px"></span>
+    <span class="hero-sakura-petal" style="--x:10%;--size:11px;--duration:24s;--delay:-5s;--opacity:.55;--r0:-22deg;--d1:-28px;--d2:24px;--d3:-18px"></span>
+    <span class="hero-sakura-petal" style="--x:17%;--size:17px;--duration:22s;--delay:-17s;--opacity:.72;--r0:34deg;--d1:34px;--d2:-30px;--d3:14px"></span>
+    <span class="hero-sakura-petal" style="--x:25%;--size:12px;--duration:27s;--delay:-9s;--opacity:.58;--r0:-12deg;--d1:-38px;--d2:16px;--d3:-25px"></span>
+    <span class="hero-sakura-petal" style="--x:33%;--size:14px;--duration:20s;--delay:-3s;--opacity:.66;--r0:27deg;--d1:26px;--d2:-20px;--d3:38px"></span>
+    <span class="hero-sakura-petal" style="--x:41%;--size:10px;--duration:25s;--delay:-20s;--opacity:.54;--r0:-31deg;--d1:-22px;--d2:31px;--d3:-16px"></span>
+    <span class="hero-sakura-petal" style="--x:49%;--size:18px;--duration:23s;--delay:-14s;--opacity:.74;--r0:11deg;--d1:40px;--d2:-24px;--d3:22px"></span>
+    <span class="hero-sakura-petal" style="--x:57%;--size:12px;--duration:28s;--delay:-7s;--opacity:.57;--r0:-18deg;--d1:-30px;--d2:20px;--d3:-34px"></span>
+    <span class="hero-sakura-petal" style="--x:64%;--size:15px;--duration:21s;--delay:-16s;--opacity:.68;--r0:36deg;--d1:32px;--d2:-28px;--d3:18px"></span>
+    <span class="hero-sakura-petal" style="--x:71%;--size:11px;--duration:26s;--delay:-11s;--opacity:.56;--r0:-9deg;--d1:-24px;--d2:34px;--d3:-20px"></span>
+    <span class="hero-sakura-petal" style="--x:77%;--size:16px;--duration:22s;--delay:-2s;--opacity:.70;--r0:24deg;--d1:36px;--d2:-22px;--d3:31px"></span>
+    <span class="hero-sakura-petal" style="--x:83%;--size:13px;--duration:29s;--delay:-19s;--opacity:.60;--r0:-27deg;--d1:-35px;--d2:18px;--d3:-28px"></span>
+    <span class="hero-sakura-petal" style="--x:89%;--size:17px;--duration:24s;--delay:-8s;--opacity:.73;--r0:14deg;--d1:28px;--d2:-32px;--d3:20px"></span>
+    <span class="hero-sakura-petal" style="--x:94%;--size:10px;--duration:27s;--delay:-15s;--opacity:.53;--r0:-35deg;--d1:-20px;--d2:27px;--d3:-31px"></span>
+    <span class="hero-sakura-petal" style="--x:20%;--size:9px;--duration:30s;--delay:-23s;--opacity:.48;--r0:42deg;--d1:18px;--d2:-26px;--d3:33px"></span>
+    <span class="hero-sakura-petal" style="--x:68%;--size:9px;--duration:31s;--delay:-26s;--opacity:.48;--r0:-41deg;--d1:-19px;--d2:25px;--d3:-29px"></span>
+  </div>
   <div class="reveal">
     <p class="kicker">12 August · Quy Nhơn to Gothenburg</p>
     <h1>Happy Birthday,<br><em>Duyên.</em></h1>
