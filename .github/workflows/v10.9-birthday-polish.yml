@@ -1,9 +1,9 @@
 name: Apply V10.9 Birthday Polish
 
 on:
-  push:
-    paths:
-      - .github/workflows/v10.9-birthday-polish.yml
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -13,8 +13,10 @@ jobs:
   polish:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout pull-request branch
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
 
       - name: Apply birthday and copy polish
         run: python3 .github/scripts/apply_v109.py
@@ -52,5 +54,3 @@ jobs:
           git add index.html README.md
           git commit -m "feat: add birthday-day state and open-ended ending"
           git push
-
-# Triggered after merging the V10.9 preparation PR into main.
