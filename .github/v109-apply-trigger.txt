@@ -1,1 +1,0 @@
-This file opens the same-repository pull request that applies and validates the V10.9 birthday polish.
