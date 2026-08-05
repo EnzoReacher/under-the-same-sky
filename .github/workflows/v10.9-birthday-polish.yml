@@ -1,0 +1,56 @@
+name: Apply V10.9 Birthday Polish
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  polish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pull-request branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+
+      - name: Apply birthday and copy polish
+        run: python3 .github/scripts/apply_v109.py
+
+      - name: Validate updated website
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          html = Path('index.html').read_text(encoding='utf-8')
+          required = [
+              '10.9-birthday-polish',
+              'under-samma-himmel.hoangnt2000.chatgpt.site',
+              'birthdayNowMessage',
+              'BIRTHDAY_TIME_ZONE="Europe/Stockholm"',
+              'Còn ngày mai, cứ để ngày mai tự trả lời.',
+          ]
+          missing = [item for item in required if item not in html]
+          if missing:
+              raise SystemExit(f'Missing required V10.9 markers: {missing}')
+          if html.count('{') != html.count('}'):
+              raise SystemExit('Unbalanced braces after update')
+          print('V10.9 markers and brace balance verified.')
+          PY
+
+      - name: Commit polished version
+        shell: bash
+        run: |
+          if git diff --quiet && [ -z "$(git status --porcelain)" ]; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html README.md
+          git commit -m "feat: add birthday-day state and open-ended ending"
+          git push

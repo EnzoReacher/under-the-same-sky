@@ -9,23 +9,23 @@
 <meta http-equiv="Expires" content="0">
 <meta name="description" content="Một món quà nhỏ đi từ Quy Nhơn đến Gothenburg, dành riêng cho em.">
 <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
-<meta name="app-version" content="10.8.1-epilogue-fix">
-<link rel="canonical" href="https://enzoreacher.github.io/under-the-same-sky/">
+<meta name="app-version" content="10.9-birthday-polish">
+<link rel="canonical" href="https://under-samma-himmel.hoangnt2000.chatgpt.site/">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <meta property="og:locale" content="vi_VN">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Under the same sky">
 <meta property="og:title" content="Under the same sky — A little place for us">
 <meta property="og:description" content="Một món quà nhỏ đi từ Quy Nhơn đến Gothenburg, dành riêng cho em.">
-<meta property="og:url" content="https://enzoreacher.github.io/under-the-same-sky/">
-<meta property="og:image" content="https://enzoreacher.github.io/under-the-same-sky/assets/our-shadow.jpg">
+<meta property="og:url" content="https://under-samma-himmel.hoangnt2000.chatgpt.site/">
+<meta property="og:image" content="https://under-samma-himmel.hoangnt2000.chatgpt.site/assets/our-shadow.jpg">
 <meta property="og:image:width" content="1516">
 <meta property="og:image:height" content="1469">
 <meta property="og:image:alt" content="Under the same sky — Quy Nhơn đến Gothenburg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Under the same sky — A little place for us">
 <meta name="twitter:description" content="Một món quà nhỏ đi từ Quy Nhơn đến Gothenburg, dành riêng cho em.">
-<meta name="twitter:image" content="https://enzoreacher.github.io/under-the-same-sky/assets/our-shadow.jpg">
+<meta name="twitter:image" content="https://under-samma-himmel.hoangnt2000.chatgpt.site/assets/our-shadow.jpg">
 <script>
 (() => {
   const query = "(max-width: 820px), ((pointer: coarse) and (max-width: 1100px))";
@@ -1779,10 +1779,113 @@ body.locked .botanical{
 .nav{position:absolute;z-index:20;left:6vw;right:6vw;top:22px;display:flex;justify-content:space-between;align-items:center}
 .brand{font-family:"Playfair Display",serif;color:var(--rose);font-size:1.18rem}
 .nav-actions{display:flex;gap:9px}.pill{border:1px solid var(--line);border-radius:999px;padding:10px 14px;background:rgba(255,255,255,.75);backdrop-filter:blur(10px);color:var(--muted)}
-.hero{min-height:100dvh;padding:125px 6vw 70px;display:grid;grid-template-columns:1.05fr .75fr;gap:7vw;align-items:center;background:radial-gradient(circle at 14% 18%,#f9dfe7,transparent 28%),linear-gradient(135deg,#fff,#fff6f9);overflow:hidden}
+.hero{
+  position:relative;
+  isolation:isolate;
+  min-height:100dvh;
+  padding:125px 6vw 70px;
+  display:grid;
+  grid-template-columns:1.05fr .75fr;
+  gap:7vw;
+  align-items:center;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 14% 18%,#f9dfe7,transparent 28%),
+    linear-gradient(135deg,#fff,#fff6f9);
+}
+.hero > .reveal,
+.hero > .photo-frame{
+  position:relative;
+  z-index:2;
+}
+.hero-sakura-rain{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  overflow:hidden;
+  pointer-events:none;
+  contain:layout paint;
+}
+.hero-sakura-petal{
+  position:absolute;
+  top:-13vh;
+  left:var(--x);
+  display:block;
+  width:var(--size);
+  aspect-ratio:1.45;
+  border-radius:78% 22% 72% 28%;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.96) 0 18%,rgba(250,211,224,.94) 48%,rgba(231,133,163,.88) 100%);
+  box-shadow:
+    inset -1px -1px 2px rgba(180,73,110,.16),
+    0 5px 12px rgba(145,55,86,.08);
+  opacity:0;
+  transform-origin:45% 55%;
+  will-change:transform,opacity;
+  animation:heroSakuraFall var(--duration) linear infinite;
+  animation-delay:var(--delay);
+}
+.hero-sakura-petal::after{
+  content:"";
+  position:absolute;
+  width:35%;
+  height:24%;
+  left:18%;
+  top:18%;
+  border-radius:50%;
+  background:rgba(255,255,255,.65);
+  transform:rotate(-18deg);
+}
+@keyframes heroSakuraFall{
+  0%{
+    opacity:0;
+    transform:translate3d(0,-12vh,0) rotate(var(--r0));
+  }
+  8%{opacity:var(--opacity)}
+  34%{
+    transform:translate3d(var(--d1),36vh,0) rotate(calc(var(--r0) + 135deg));
+  }
+  68%{
+    opacity:var(--opacity);
+    transform:translate3d(var(--d2),76vh,0) rotate(calc(var(--r0) + 285deg));
+  }
+  100%{
+    opacity:0;
+    transform:translate3d(var(--d3),118vh,0) rotate(calc(var(--r0) + 470deg));
+  }
+}
+@media(max-width:620px){
+  .hero-sakura-petal{
+    box-shadow:none;
+  }
+  .hero-sakura-petal:nth-child(n+10){
+    display:none;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-sakura-rain{
+    display:none;
+  }
+}
 .hero h1{font-size:clamp(4.2rem,9vw,9rem);line-height:.84;margin:0}.hero h1 em{color:var(--rose)}
 .hero-sub{max-width:580px;margin:28px 0;color:var(--muted);font-size:clamp(1rem,1.5vw,1.18rem);line-height:1.75}
 .hero-line{font-family:"Playfair Display",serif;font-style:italic;color:var(--rose);margin:12px 0 0}
+.birthday-now-message{
+  max-width:560px;
+  margin:24px 0 0;
+  padding:18px 22px;
+  border:1px solid rgba(198,29,59,.16);
+  border-radius:22px;
+  color:#7c1835;
+  background:rgba(255,255,255,.76);
+  box-shadow:0 18px 45px rgba(123,30,58,.10);
+  font-family:"Playfair Display",serif;
+  font-size:clamp(1.12rem,2.4vw,1.45rem);
+  line-height:1.55;
+  backdrop-filter:blur(12px);
+}
+.birthday-now-message strong{display:block;color:var(--rose);font-size:1.12em}
+.birthday-now-message[hidden]{display:none!important}
 .countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:min(100%,500px);padding:12px;border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.72)}
 .countdown div{padding:10px 5px;border-radius:13px;text-align:center;background:var(--soft)}.countdown strong{display:block;color:var(--rose);font-family:"Playfair Display",serif;font-size:1.55rem}.countdown small{font-size:.7rem;color:var(--muted)}
 .cta-row{display:flex;gap:12px;align-items:center;margin-top:22px;flex-wrap:wrap}.text-btn{border:0;background:transparent;color:var(--muted);padding:12px 4px}
@@ -6295,7 +6398,7 @@ img{max-width:100%}
 </head>
 <body class="locked welcome-active">
 <a class="skip-link" href="#mainContent">Đi thẳng tới nội dung chính</a>
-<span id="adaptiveBuildStatus" hidden data-build="10.8.1-epilogue-fix"></span>
+<span id="adaptiveBuildStatus" hidden data-build="10.9-birthday-polish"></span>
 
 <div class="noise"></div><div class="progress" id="progress"></div>
 <canvas id="fx"></canvas>
@@ -6560,15 +6663,37 @@ img{max-width:100%}
 </nav>
 
 <header class="hero" id="top">
+  <div class="hero-sakura-rain" aria-hidden="true">
+    <span class="hero-sakura-petal" style="--x:3%;--size:15px;--duration:19s;--delay:-12s;--opacity:.68;--r0:18deg;--d1:42px;--d2:-18px;--d3:30px"></span>
+    <span class="hero-sakura-petal" style="--x:10%;--size:11px;--duration:24s;--delay:-5s;--opacity:.55;--r0:-22deg;--d1:-28px;--d2:24px;--d3:-18px"></span>
+    <span class="hero-sakura-petal" style="--x:17%;--size:17px;--duration:22s;--delay:-17s;--opacity:.72;--r0:34deg;--d1:34px;--d2:-30px;--d3:14px"></span>
+    <span class="hero-sakura-petal" style="--x:25%;--size:12px;--duration:27s;--delay:-9s;--opacity:.58;--r0:-12deg;--d1:-38px;--d2:16px;--d3:-25px"></span>
+    <span class="hero-sakura-petal" style="--x:33%;--size:14px;--duration:20s;--delay:-3s;--opacity:.66;--r0:27deg;--d1:26px;--d2:-20px;--d3:38px"></span>
+    <span class="hero-sakura-petal" style="--x:41%;--size:10px;--duration:25s;--delay:-20s;--opacity:.54;--r0:-31deg;--d1:-22px;--d2:31px;--d3:-16px"></span>
+    <span class="hero-sakura-petal" style="--x:49%;--size:18px;--duration:23s;--delay:-14s;--opacity:.74;--r0:11deg;--d1:40px;--d2:-24px;--d3:22px"></span>
+    <span class="hero-sakura-petal" style="--x:57%;--size:12px;--duration:28s;--delay:-7s;--opacity:.57;--r0:-18deg;--d1:-30px;--d2:20px;--d3:-34px"></span>
+    <span class="hero-sakura-petal" style="--x:64%;--size:15px;--duration:21s;--delay:-16s;--opacity:.68;--r0:36deg;--d1:32px;--d2:-28px;--d3:18px"></span>
+    <span class="hero-sakura-petal" style="--x:71%;--size:11px;--duration:26s;--delay:-11s;--opacity:.56;--r0:-9deg;--d1:-24px;--d2:34px;--d3:-20px"></span>
+    <span class="hero-sakura-petal" style="--x:77%;--size:16px;--duration:22s;--delay:-2s;--opacity:.70;--r0:24deg;--d1:36px;--d2:-22px;--d3:31px"></span>
+    <span class="hero-sakura-petal" style="--x:83%;--size:13px;--duration:29s;--delay:-19s;--opacity:.60;--r0:-27deg;--d1:-35px;--d2:18px;--d3:-28px"></span>
+    <span class="hero-sakura-petal" style="--x:89%;--size:17px;--duration:24s;--delay:-8s;--opacity:.73;--r0:14deg;--d1:28px;--d2:-32px;--d3:20px"></span>
+    <span class="hero-sakura-petal" style="--x:94%;--size:10px;--duration:27s;--delay:-15s;--opacity:.53;--r0:-35deg;--d1:-20px;--d2:27px;--d3:-31px"></span>
+    <span class="hero-sakura-petal" style="--x:20%;--size:9px;--duration:30s;--delay:-23s;--opacity:.48;--r0:42deg;--d1:18px;--d2:-26px;--d3:33px"></span>
+    <span class="hero-sakura-petal" style="--x:68%;--size:9px;--duration:31s;--delay:-26s;--opacity:.48;--r0:-41deg;--d1:-19px;--d2:25px;--d3:-29px"></span>
+  </div>
   <div class="reveal">
     <p class="kicker">12 August · Quy Nhơn to Gothenburg</p>
     <h1>Happy Birthday,<br><em>Duyên.</em></h1>
-    <p class="hero-line">Năm nay anh không thể đứng cạnh em, nên anh gom những điều muốn nói vào đây.</p>
-    <p class="hero-sub">Không phải món quà lớn. Chỉ là một nơi nhỏ anh làm riêng cho em, để khoảng cách hôm nay bớt xa đi một chút.</p>
-    <div class="countdown">
+    <p class="hero-line" id="heroBirthdayLine">Năm nay anh không thể đứng cạnh em, nên anh gom những điều muốn nói vào đây.</p>
+    <p class="hero-sub" id="heroBirthdaySub">Không phải món quà lớn. Chỉ là một nơi nhỏ anh làm riêng cho em, để khoảng cách hôm nay bớt xa đi một chút.</p>
+    <div class="countdown" id="birthdayCountdown">
       <div><strong id="dd">00</strong><small>days</small></div><div><strong id="hh">00</strong><small>hours</small></div>
       <div><strong id="mm">00</strong><small>mins</small></div><div><strong id="ss">00</strong><small>secs</small></div>
     </div>
+    <p class="birthday-now-message" id="birthdayNowMessage" role="status" aria-live="polite" hidden>
+      <strong>Hôm nay là ngày của em.</strong>
+      Chúc mừng sinh nhật, em bé. Mong tuổi mới dịu dàng với em và mang đến thật nhiều điều khiến em mỉm cười.
+    </p>
     <div class="cta-row"><button type="button" class="solid" id="begin">Xem tiếp</button><button type="button" class="text-btn" id="skip">Mở lá thư</button></div>
   </div>
   <div class="photo-frame reveal">
@@ -6661,7 +6786,7 @@ img{max-width:100%}
 <section class="section" id="story">
   <div class="split">
     <div class="reveal"><p class="kicker">Only one photo of us</p><h2 class="big-title">Hai đứa mình chưa có nhiều ảnh chung.</h2></div>
-    <div class="reveal"><div class="quote">Tấm ảnh chung duy nhất chỉ là hai cái bóng. Không rõ mặt, không cầu kỳ, nhưng anh vẫn thích nó nhất.</div><p class="small-note">Sau này chắc trang này sẽ có thêm nhiều ảnh chung hơn.</p></div>
+    <div class="reveal"><div class="quote">Tấm ảnh chung duy nhất chỉ là hai cái bóng. Không rõ mặt, không cầu kỳ, nhưng anh vẫn thích nó nhất.</div><p class="small-note">Anh mong rồi sẽ có thêm những tấm ảnh chung, nếu một ngày hai đứa có cơ hội đứng cạnh nhau.</p></div>
   </div>
 </section>
 
@@ -6679,7 +6804,7 @@ img{max-width:100%}
   <div class="timeline">
     <article class="moment reveal"><time>Ngay từ lần đầu</time><div><h3>Lần đầu anh nhìn thấy em</h3><p>Anh đã có một cảm giác rất khác — khó gọi tên, nhưng đủ để anh biết em sẽ là một người đặc biệt.</p></div></article>
     <article class="moment reveal"><time>Từ những chuyện nhỏ</time><div><h3>Em dần bước vào mỗi ngày của anh</h3><p>Từ những câu chuyện tưởng như rất bình thường, em trở thành người anh muốn kể cho nghe những điều nhỏ nhất trong ngày.</p></div></article>
-    <article class="moment reveal"><time>Khi thành hai đứa</time><div><h3>Anh bắt đầu nghĩ xa hơn hôm nay</h3><p>Không chỉ là một món quà sinh nhật. Anh bắt đầu muốn có thêm những ngày, những chuyến đi và những tấm ảnh thật sự có cả hai đứa.</p></div></article>
+    <article class="moment reveal"><time>Khi thành hai đứa</time><div><h3>Anh bắt đầu trân trọng điều đang có</h3><p>Không chỉ là một món quà sinh nhật. Anh muốn giữ lại cảm giác của hiện tại — những câu chuyện, sự quan tâm và khoảng cách mà hai đứa vẫn đang cố gắng đi qua.</p></div></article>
     <article class="moment reveal"><time>Bây giờ</time><div><h3>Quy Nhơn — Gothenburg</h3><p>Xa nhau vài múi giờ, nhưng vẫn dành thời gian, sự kiên nhẫn và một chỗ trong cuộc sống cho nhau.</p></div></article>
   </div>
 </section>
@@ -6798,7 +6923,7 @@ img{max-width:100%}
   <div class="reveal"><p class="kicker">Open when</p><h2 class="big-title">Mở lúc cần.</h2></div>
   <div class="open-grid">
     <button type="button" class="open-card reveal" data-msg="Buồn thì nói với anh. Không cần tự ôm hết một mình."><small>Open when</small><strong>Em buồn</strong></button>
-    <button type="button" class="open-card reveal" data-msg="Anh cũng nhớ em. Ráng thêm chút nữa rồi sẽ có ngày gặp nhau."><small>Open when</small><strong>Em nhớ anh</strong></button>
+    <button type="button" class="open-card reveal" data-msg="Anh cũng nhớ em. Dù ngày mai thế nào, những điều mình đã dành cho nhau vẫn là thật."><small>Open when</small><strong>Em nhớ anh</strong></button>
     <button type="button" class="open-card reveal" data-msg="Giận thì giận, nhưng nói chuyện cho rõ rồi làm hòa."><small>Open when</small><strong>Em giận anh</strong></button>
     <button type="button" class="open-card reveal" data-msg="Đừng nghĩ nhiều nữa. Ngủ đi, mai nói chuyện tiếp."><small>Open when</small><strong>Em mất ngủ</strong></button>
   </div>
@@ -6911,13 +7036,13 @@ img{max-width:100%}
         <div class="secret-ending-body">
           <div class="secret-ending-seal">D&H</div>
 
-          <p class="secret-ending-kicker">The beginning, not the ending</p>
-          <h4>Đây mới chỉ là phiên bản đầu tiên.</h4>
+          <p class="secret-ending-kicker">A little place to remember</p>
+          <h4>Một nơi nhỏ để giữ lại hôm nay.</h4>
 
           <p class="secret-ending-copy">
-            Trang này bắt đầu từ sinh nhật em. Nhưng anh không định để nó dừng lại ở hôm nay.
-            Anh sẽ tiếp tục thêm những câu chuyện, những tấm ảnh và những ngày của hai đứa —
-            để nơi này dần trở thành một góc riêng của hai đứa mình.
+            Trang này bắt đầu từ sinh nhật em, để giữ lại những điều anh thật lòng muốn nói ở hiện tại.
+            Tương lai sẽ đi đâu, anh không muốn đoán thay cả hai đứa —
+            chỉ mong khi em mở lại, em vẫn cảm nhận được sự chân thành anh đã đặt vào đây.
           </p>
 
           <div class="secret-path" aria-label="Hành trình phát triển không gian riêng của hai đứa">
@@ -6928,12 +7053,12 @@ img{max-width:100%}
             <i aria-hidden="true"></i>
             <div>
               <b>02</b>
-              <span><small>Sau này</small>Thêm những điều của hai đứa</span>
+              <span><small>Nếu có dịp</small>Thêm một kỷ niệm mới</span>
             </div>
             <i aria-hidden="true"></i>
             <div>
               <b>∞</b>
-              <span><small>Dần dần</small>Một nơi chỉ hai đứa hiểu</span>
+              <span><small>Về sau</small>Một nơi để nhớ lại</span>
             </div>
           </div>
 
@@ -7004,7 +7129,7 @@ img{max-width:100%}
       <div class="letter-copy">
         <p class="letter-line lead" style="--i:3">Sinh nhật năm nay anh không thể ở cạnh em, nên anh làm nơi này để thay anh mang món quà đến bên em.</p>
         <p class="letter-line" style="--i:4">Từ lần đầu nhìn thấy em, anh đã có một cảm giác mà trước đó chưa từng có với ai. Anh không biết gọi tên nó thế nào, chỉ biết từ lúc ấy em đã trở thành một người rất đặc biệt.</p>
-        <p class="letter-line" style="--i:5">Hai đứa chưa có nhiều ảnh chung, cũng chưa đi cùng nhau được nhiều. Nhưng anh không thấy điều đó đáng buồn, vì anh vẫn muốn tin phía trước còn rất nhiều ngày để hai đứa làm đầy những chỗ đang còn trống.</p>
+        <p class="letter-line" style="--i:5">Hai đứa chưa có nhiều ảnh chung, cũng chưa đi cùng nhau được nhiều. Anh không muốn biến tương lai thành một lời hứa thay cho cả hai; anh chỉ biết những gì mình đã có đến hôm nay đều đáng để anh trân trọng.</p>
 
         <blockquote class="letter-heartline letter-line" style="--i:6">
           <span aria-hidden="true">“</span>
@@ -7031,7 +7156,7 @@ img{max-width:100%}
           <small>Còn một điều nữa</small>
         </button>
         <div class="ps-reveal" id="psReveal">
-          <p>Đây mới chỉ là phiên bản đầu tiên. Anh muốn nơi này lớn lên cùng những câu chuyện, tấm ảnh và những ngày của hai đứa.</p>
+          <p>Đây là phiên bản anh làm cho sinh nhật em. Nếu sau này có thêm một kỷ niệm đẹp, anh sẽ biết nơi để giữ nó lại.</p>
           <p>Sau này có lúc em nhớ anh, bé cứ mở lại nhé. Nó vẫn sẽ ở đây, như một chỗ nhỏ chỉ hai đứa mình hiểu.</p>
 
           <div class="gift-capsule" id="giftCapsule">
@@ -7117,7 +7242,7 @@ img{max-width:100%}
           <p class="final-message-eyebrow">For you</p>
           <strong>Anh nhớ em.</strong>
           <h3>Chúc mừng sinh nhật, em bé.</h3>
-          <small>Đây mới chỉ là trang đầu tiên của “thế giới riêng” hai đứa mình.</small>
+          <small>Anh để những trang sau còn trống, cho bất cứ điều gì tương lai mang đến.</small>
         </div>
       </div>
     </div>
@@ -7173,8 +7298,8 @@ img{max-width:100%}
         </div>
         <div class="future-card-copy">
           <span>Tấm ảnh tiếp theo</span>
-          <strong>Để dành cho ngày hai đứa gặp nhau.</strong>
-          <p>Anh chưa có tấm ảnh này để đặt vào đây. Mình sẽ chụp nó sau.</p>
+          <strong>Một chỗ trống cho điều chưa biết.</strong>
+          <p>Anh chưa có tấm ảnh này. Nếu một ngày nó tồn tại, nơi này sẽ có chỗ để giữ lại.</p>
         </div>
       </article>
     </div>
@@ -7198,8 +7323,8 @@ img{max-width:100%}
           <div class="ticket-main">
             <div class="ticket-head">
               <div>
-                <small>Future ticket · Private</small>
-                <strong>Our first day together</strong>
+                <small>Open ticket · Private</small>
+                <strong>For a day not decided yet</strong>
               </div>
               <div class="ticket-heart">♥</div>
             </div>
@@ -7226,10 +7351,10 @@ img{max-width:100%}
               <div><small>Passengers</small><b>Duyên & Hoàng</b></div>
               <div><small>Seat</small><b>Next to each other</b></div>
               <div><small>Date</small><b>To be decided</b></div>
-              <div><small>Status</small><b>Reserved</b></div>
+              <div><small>Status</small><b>Open</b></div>
             </div>
 
-            <p class="ticket-note">Tấm vé này không có ngày hết hạn.</p>
+            <p class="ticket-note">Không phải lời hứa — chỉ là một chỗ nhỏ cho điều có thể đến.</p>
           </div>
 
           <div class="ticket-stub">
@@ -7259,12 +7384,12 @@ img{max-width:100%}
       <i></i><i></i><i></i><i></i><i></i>
     </div>
     <div class="epilogue-heart" aria-hidden="true">♡</div>
-    <p class="epilogue-kicker">D&H · To be continued</p>
+    <p class="epilogue-kicker">D&H · 12 August</p>
     <h2>
       <span>Món quà này kết thúc ở đây.</span>
-      <strong>Còn câu chuyện của hai đứa thì chưa.</strong>
+      <strong>Còn ngày mai, cứ để ngày mai tự trả lời.</strong>
     </h2>
-    <p class="epilogue-copy">Chúc mừng sinh nhật, em bé. Hẹn em ở tấm ảnh tiếp theo.</p>
+    <p class="epilogue-copy">Chúc mừng sinh nhật, em bé. Cảm ơn em vì đã có mặt trong những điều đẹp đẽ anh giữ ở đây.</p>
     <button class="epilogue-back" id="epilogueBack" type="button">Quay lại món quà</button>
   </div>
 </section>
@@ -7694,8 +7819,49 @@ function loadPhotos(){
   }
 }
 
-function target(){const n=new Date(),y=n.getFullYear();let t=new Date(Date.UTC(y,7,11,22));if(t<n)t=new Date(Date.UTC(y+1,7,11,22));return t}
-function tick(){let d=Math.max(0,target()-Date.now()),s=Math.floor(d/1000);$("#dd").textContent=String(Math.floor(s/86400)).padStart(2,"0");$("#hh").textContent=String(Math.floor(s%86400/3600)).padStart(2,"0");$("#mm").textContent=String(Math.floor(s%3600/60)).padStart(2,"0");$("#ss").textContent=String(s%60).padStart(2,"0")}
+const BIRTHDAY_TIME_ZONE="Europe/Stockholm";
+const birthdayDateFormatter=new Intl.DateTimeFormat("en-CA",{
+  timeZone:BIRTHDAY_TIME_ZONE,
+  year:"numeric",
+  month:"2-digit",
+  day:"2-digit"
+});
+
+function getBirthdayLocalDate(date=new Date()){
+  const values={};
+  birthdayDateFormatter.formatToParts(date).forEach(part=>{
+    if(part.type!=="literal") values[part.type]=Number(part.value);
+  });
+  return {year:values.year,month:values.month,day:values.day};
+}
+
+function target(date=new Date()){
+  const local=getBirthdayLocalDate(date);
+  const birthdayPassed=local.month>8 || (local.month===8 && local.day>12);
+  const targetYear=birthdayPassed?local.year+1:local.year;
+  return new Date(Date.UTC(targetYear,7,11,22));
+}
+
+function tick(){
+  const now=new Date();
+  const local=getBirthdayLocalDate(now);
+  const isBirthday=local.month===8 && local.day===12;
+  const countdown=$("#birthdayCountdown");
+  const birthdayMessage=$("#birthdayNowMessage");
+
+  if(countdown) countdown.hidden=isBirthday;
+  if(birthdayMessage) birthdayMessage.hidden=!isBirthday;
+  document.body.classList.toggle("birthday-today",isBirthday);
+
+  if(isBirthday) return;
+
+  const d=Math.max(0,target(now)-now.getTime());
+  const s=Math.floor(d/1000);
+  $("#dd").textContent=String(Math.floor(s/86400)).padStart(2,"0");
+  $("#hh").textContent=String(Math.floor(s%86400/3600)).padStart(2,"0");
+  $("#mm").textContent=String(Math.floor(s%3600/60)).padStart(2,"0");
+  $("#ss").textContent=String(s%60).padStart(2,"0");
+}
 let countdownTimer=null;
 function startCountdown(){
   if(countdownTimer) return;
