@@ -1,4 +1,4 @@
-# Under the same sky — V10.8.1 Epilogue Fix
+# Under the same sky — V10.9 Birthday Polish
 
 Một món quà sinh nhật riêng đi từ Quy Nhơn đến Gothenburg.
 
@@ -31,3 +31,12 @@ GitHub Pages: branch `main`, folder `/(root)`.
 - Sửa màn “Đọc dòng cuối cùng” xuất hiện ngoài viewport khi cinematic đã cuộn xuống.
 - Epilogue bám trực tiếp theo viewport trên desktop và mobile.
 - Khi quay lại, cinematic trở về đúng vị trí tấm vé.
+
+
+## V10.9
+
+- Cập nhật canonical, Open Graph và ảnh chia sẻ sang `https://under-samma-himmel.hoangnt2000.chatgpt.site/`.
+- Trong toàn bộ ngày 12/8 theo múi giờ Gothenburg, đồng hồ chuyển thành lời chúc sinh nhật riêng.
+- Sau ngày 12/8, đồng hồ tự chuyển sang sinh nhật năm kế tiếp.
+- Làm mềm các đoạn kết và lời nhắn về tương lai để giữ sự chân thành mà không áp đặt một happy ending.
+- Giữ nguyên vị trí chờ `our-song.mp3` và `message-for-duyen.mp3`.
