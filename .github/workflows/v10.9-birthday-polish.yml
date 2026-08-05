@@ -52,3 +52,5 @@ jobs:
           git add index.html README.md
           git commit -m "feat: add birthday-day state and open-ended ending"
           git push
+
+# Triggered after merging the V10.9 preparation PR into main.
