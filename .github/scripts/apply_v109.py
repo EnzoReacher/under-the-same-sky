@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 INDEX = Path("index.html")
 README = Path("README.md")
@@ -8,7 +9,11 @@ VERSION = "10.9-birthday-polish"
 
 html = INDEX.read_text(encoding="utf-8")
 
-if f'content="{VERSION}"' in html and f'data-build="{VERSION}"' in html:
+if (
+    f'content="{VERSION}"' in html
+    and f'data-build="{VERSION}"' in html
+    and 'id="birthdayNowMessage"' in html
+):
     print("V10.9 already applied.")
     raise SystemExit(0)
 
@@ -29,31 +34,40 @@ def soft_replace(old: str, new: str, label: str) -> None:
         print(f"Skipped absent optional text: {label}")
 
 
-# Build metadata and public sharing URLs.
-html = html.replace(
-    '<meta name="app-version" content="10.8.2-hero-sakura-rain">',
+# Build marker and public sharing URLs.
+html, count = re.subn(
+    r'<meta name="app-version" content="[^"]+">',
     f'<meta name="app-version" content="{VERSION}">',
-    1,
+    html,
+    count=1,
 )
-html = html.replace(
-    'data-build="10.8.2-hero-sakura-rain"',
-    f'data-build="{VERSION}"',
-    1,
-)
-for old, new in (
-    ('<link rel="canonical" href="https://enzoreacher.github.io/under-the-same-sky/">', f'<link rel="canonical" href="{PUBLIC_URL}">'),
-    ('<meta property="og:url" content="https://enzoreacher.github.io/under-the-same-sky/">', f'<meta property="og:url" content="{PUBLIC_URL}">'),
-    ('<meta property="og:image" content="https://enzoreacher.github.io/under-the-same-sky/assets/our-shadow.jpg">', f'<meta property="og:image" content="{PUBLIC_IMAGE}">'),
-    ('<meta name="twitter:image" content="https://enzoreacher.github.io/under-the-same-sky/assets/our-shadow.jpg">', f'<meta name="twitter:image" content="{PUBLIC_IMAGE}">'),
-):
-    if old in html:
-        html = html.replace(old, new, 1)
+if count != 1:
+    raise SystemExit("Missing app-version metadata")
 
-# Birthday-day presentation in the hero.
-css_anchor = '''.hero-line{font-family:"Playfair Display",serif;font-style:italic;color:var(--rose);margin:12px 0 0}
-.hero-sub{max-width:580px;margin:28px 0;color:var(--muted);font-size:clamp(1rem,1.5vw,1.18rem);line-height:1.75}'''
-css_replacement = '''.hero-line{font-family:"Playfair Display",serif;font-style:italic;color:var(--rose);margin:12px 0 0}
-.hero-sub{max-width:580px;margin:28px 0;color:var(--muted);font-size:clamp(1rem,1.5vw,1.18rem);line-height:1.75}
+html, count = re.subn(
+    r'data-build="[^"]+"',
+    f'data-build="{VERSION}"',
+    html,
+    count=1,
+)
+if count != 1:
+    raise SystemExit("Missing adaptive build marker")
+
+metadata_patterns = (
+    (r'<link rel="canonical" href="[^"]+">', f'<link rel="canonical" href="{PUBLIC_URL}">'),
+    (r'<meta property="og:url" content="[^"]+">', f'<meta property="og:url" content="{PUBLIC_URL}">'),
+    (r'<meta property="og:image" content="[^"]+">', f'<meta property="og:image" content="{PUBLIC_IMAGE}">'),
+    (r'<meta name="twitter:image" content="[^"]+">', f'<meta name="twitter:image" content="{PUBLIC_IMAGE}">'),
+)
+for pattern, replacement in metadata_patterns:
+    html, count = re.subn(pattern, replacement, html, count=1)
+    if count != 1:
+        raise SystemExit(f"Missing metadata pattern: {pattern}")
+
+# Insert birthday-day styling after the existing hero-line rule, regardless of hero-sub order.
+if ".birthday-now-message{" not in html:
+    hero_line_pattern = r'(\.hero-line\{[^\n]+\})'
+    birthday_css = r'''\1
 .birthday-now-message{
   max-width:560px;
   margin:24px 0 0;
@@ -70,7 +84,9 @@ css_replacement = '''.hero-line{font-family:"Playfair Display",serif;font-style:
 }
 .birthday-now-message strong{display:block;color:var(--rose);font-size:1.12em}
 .birthday-now-message[hidden]{display:none!important}'''
-must_replace(css_anchor, css_replacement, "hero birthday CSS anchor")
+    html, count = re.subn(hero_line_pattern, birthday_css, html, count=1)
+    if count != 1:
+        raise SystemExit("Missing hero-line CSS rule")
 
 hero_copy_old = '''    <p class="hero-line">Năm nay anh không thể đứng cạnh em, nên anh gom những điều muốn nói vào đây.</p>
     <p class="hero-sub">Không phải món quà lớn. Chỉ là một nơi nhỏ anh làm riêng cho em, để khoảng cách hôm nay bớt xa đi một chút.</p>
@@ -137,7 +153,7 @@ function tick(){
 }'''
 must_replace(countdown_old, countdown_new, "birthday countdown JavaScript")
 
-# Make the relationship language romantic but open-ended rather than promising a fixed ending.
+# Romantic but open-ended copy.
 replacements = [
     (
         "Sau này chắc trang này sẽ có thêm nhiều ảnh chung hơn.",
@@ -152,11 +168,11 @@ replacements = [
     (
         'data-msg="Anh cũng nhớ em. Ráng thêm chút nữa rồi sẽ có ngày gặp nhau."',
         'data-msg="Anh cũng nhớ em. Dù ngày mai thế nào, những điều mình đã dành cho nhau vẫn là thật."',
-        "open-when missing message",
+        "open-when message",
     ),
     (
-        "<p class=\"secret-ending-kicker\">The beginning, not the ending</p>\n          <h4>Đây mới chỉ là phiên bản đầu tiên.</h4>",
-        "<p class=\"secret-ending-kicker\">A little place to remember</p>\n          <h4>Một nơi nhỏ để giữ lại hôm nay.</h4>",
+        '<p class="secret-ending-kicker">The beginning, not the ending</p>\n          <h4>Đây mới chỉ là phiên bản đầu tiên.</h4>',
+        '<p class="secret-ending-kicker">A little place to remember</p>\n          <h4>Một nơi nhỏ để giữ lại hôm nay.</h4>',
         "game ending heading",
     ),
     (
@@ -205,13 +221,13 @@ replacements = [
         "future ticket status",
     ),
     (
-        "<p class=\"ticket-note\">Tấm vé này không có ngày hết hạn.</p>",
-        "<p class=\"ticket-note\">Không phải lời hứa — chỉ là một chỗ nhỏ cho điều có thể đến.</p>",
+        '<p class="ticket-note">Tấm vé này không có ngày hết hạn.</p>',
+        '<p class="ticket-note">Không phải lời hứa — chỉ là một chỗ nhỏ cho điều có thể đến.</p>',
         "future ticket note",
     ),
     (
-        "<p class=\"epilogue-kicker\">D&H · To be continued</p>",
-        "<p class=\"epilogue-kicker\">D&H · 12 August</p>",
+        '<p class="epilogue-kicker">D&H · To be continued</p>',
+        '<p class="epilogue-kicker">D&H · 12 August</p>',
         "epilogue kicker",
     ),
     (
@@ -220,8 +236,8 @@ replacements = [
         "epilogue ending",
     ),
     (
-        "<p class=\"epilogue-copy\">Chúc mừng sinh nhật, em bé. Hẹn em ở tấm ảnh tiếp theo.</p>",
-        "<p class=\"epilogue-copy\">Chúc mừng sinh nhật, em bé. Cảm ơn em vì đã có mặt trong những điều đẹp đẽ anh giữ ở đây.</p>",
+        '<p class="epilogue-copy">Chúc mừng sinh nhật, em bé. Hẹn em ở tấm ảnh tiếp theo.</p>',
+        '<p class="epilogue-copy">Chúc mừng sinh nhật, em bé. Cảm ơn em vì đã có mặt trong những điều đẹp đẽ anh giữ ở đây.</p>',
         "epilogue copy",
     ),
 ]
@@ -232,7 +248,7 @@ INDEX.write_text(html, encoding="utf-8")
 
 readme = README.read_text(encoding="utf-8")
 if not readme.startswith("# Under the same sky — V10.9"):
-    first_line, rest = readme.split("\n", 1)
+    _, rest = readme.split("\n", 1)
     readme = "# Under the same sky — V10.9 Birthday Polish\n" + rest
 
 if "## V10.9" not in readme:
