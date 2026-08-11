@@ -25,6 +25,12 @@ GitHub Pages: branch `main`, folder `/(root)`.
 
 `https://enzoreacher.github.io/under-the-same-sky/`
 
+## V24 — Reliable voice playback
+
+- Chuyển lời chúc và nhạc nền từ dữ liệu nhúng trong HTML sang file MP3 cùng tên miền để Safari và trình duyệt mobile tải ổn định hơn.
+- Chuẩn hóa âm lượng lời chúc, giữ nguyên thời lượng 2 phút 11 giây.
+- Giữ cơ chế hạ nhỏ nhạc nền khi lời chúc đang phát và khôi phục âm lượng sau khi dừng.
+
 
 ## V10.8.1
 
