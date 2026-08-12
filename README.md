@@ -1,4 +1,4 @@
-# Under the same sky — V10.9 Birthday Polish
+# Under the same sky — V28 Final
 
 Một món quà sinh nhật riêng đi từ Quy Nhơn đến Gothenburg.
 
@@ -24,6 +24,14 @@ Một món quà sinh nhật riêng đi từ Quy Nhơn đến Gothenburg.
 GitHub Pages: branch `main`, folder `/(root)`.
 
 `https://enzoreacher.github.io/under-the-same-sky/`
+
+## V28 — Final mobile & desktop audio mix
+
+- Cập nhật đồng thời hai bản hoàn chỉnh trong `mobile/` và `desktop/`.
+- Khi mở lá thư, nhạc nền hạ ngay xuống mức nhẹ.
+- Khi phát lời chúc, giọng thật ở mức 84% và nhạc nền tiếp tục chạy ở mức 6,5%.
+- Khi tạm dừng hoặc nghe hết lời chúc, nhạc nền tự trở lại mức bình thường.
+- Trang gốc tự nhận diện thiết bị và chuyển tới đúng bản V28.
 
 ## V24 — Reliable voice playback
 

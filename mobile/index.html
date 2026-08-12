@@ -8925,14 +8925,34 @@ $("#skip").onclick=()=>$("#letter").scrollIntoView({behavior:"smooth"});
 
 const bgm=$("#bgm"),music=$("#music");
 const BGM_NORMAL_VOLUME=.24;
-const BGM_LETTER_VOLUME=.11;
-const BGM_VOICE_VOLUME=.11;
+const BGM_LETTER_VOLUME=.08;
+const BGM_VOICE_VOLUME=.065;
+const VOICE_PLAYBACK_VOLUME=.84;
 let bgmFadeFrame=null;
+let bgmPauseTimer=null;
+let bgmAudioContext=null;
+let bgmSourceNode=null;
+let bgmGainNode=null;
+let voiceSourceNode=null;
+let voiceGainNode=null;
+let bgmManuallyPaused=false;
 let bgmWasPlayingBeforeVoice=false;
 let bgmVolumeBeforeVoice=BGM_NORMAL_VOLUME;
 
 function fadeAudioTo(audio,target,duration=700,{pauseAtEnd=false}={}){
   if(!audio) return;
+
+  if(audio===bgm && bgmAudioContext && bgmGainNode){
+    clearTimeout(bgmPauseTimer);
+    const now=bgmAudioContext.currentTime;
+    const safeTarget=Math.max(0,Math.min(1,target));
+    bgmGainNode.gain.cancelScheduledValues(now);
+    bgmGainNode.gain.setValueAtTime(bgmGainNode.gain.value,now);
+    bgmGainNode.gain.linearRampToValueAtTime(safeTarget,now+Math.max(duration,1)/1000);
+    if(pauseAtEnd) bgmPauseTimer=setTimeout(()=>audio.pause(),duration+40);
+    return;
+  }
+
   cancelAnimationFrame(bgmFadeFrame);
 
   const startVolume=Number.isFinite(audio.volume)?audio.volume:1;
@@ -8953,17 +8973,108 @@ function fadeAudioTo(audio,target,duration=700,{pauseAtEnd=false}={}){
   bgmFadeFrame=requestAnimationFrame(step);
 }
 
+function ensureBgmWebAudioMixer(initialLevel=BGM_NORMAL_VOLUME){
+  const AudioContextClass=window.AudioContext || window.webkitAudioContext;
+  if(!AudioContextClass || !bgm) return false;
+  try{
+    if(!bgmAudioContext){
+      bgmAudioContext=new AudioContextClass();
+      bgmSourceNode=bgmAudioContext.createMediaElementSource(bgm);
+      bgmGainNode=bgmAudioContext.createGain();
+      bgmGainNode.gain.value=Math.max(0,Math.min(1,initialLevel));
+      bgmSourceNode.connect(bgmGainNode);
+      bgmGainNode.connect(bgmAudioContext.destination);
+      cancelAnimationFrame(bgmFadeFrame);
+      bgm.volume=1;
+    }
+    if(bgmAudioContext.state==="suspended") bgmAudioContext.resume().catch(()=>{});
+    return true;
+  }catch{
+    return false;
+  }
+}
+
+function ensureVoiceWebAudioMixer(){
+  if(!voice) return false;
+  if(!ensureBgmWebAudioMixer(BGM_NORMAL_VOLUME) || !bgmAudioContext) return false;
+  try{
+    if(!voiceSourceNode){
+      voiceSourceNode=bgmAudioContext.createMediaElementSource(voice);
+      voiceGainNode=bgmAudioContext.createGain();
+      voiceGainNode.gain.value=VOICE_PLAYBACK_VOLUME;
+      voiceSourceNode.connect(voiceGainNode);
+      voiceGainNode.connect(bgmAudioContext.destination);
+      voice.volume=1;
+    }else{
+      voiceGainNode.gain.value=VOICE_PLAYBACK_VOLUME;
+    }
+    if(bgmAudioContext.state==="suspended") bgmAudioContext.resume().catch(()=>{});
+    return true;
+  }catch{
+    voice.volume=VOICE_PLAYBACK_VOLUME;
+    return false;
+  }
+}
+
+function duckBackgroundForRecordedVoice(){
+  if(!bgm || bgm.paused) return;
+  ensureBgmWebAudioMixer(BGM_VOICE_VOLUME);
+  if(!bgmWasPlayingBeforeVoice){
+    bgmWasPlayingBeforeVoice=true;
+    bgmVolumeBeforeVoice=BGM_NORMAL_VOLUME;
+  }
+  fadeAudioTo(bgm,BGM_VOICE_VOLUME,320);
+}
+
+async function restoreBackgroundAfterRecordedVoice(){
+  const shouldRestore=bgmWasPlayingBeforeVoice && bgm && !bgmManuallyPaused;
+  bgmWasPlayingBeforeVoice=false;
+  bgmVolumeBeforeVoice=BGM_NORMAL_VOLUME;
+  if(!shouldRestore) return;
+  try{
+    if(bgm.paused){
+      await bgm.play();
+      music.textContent="Tắt nhạc";
+    }
+    fadeAudioTo(bgm,BGM_NORMAL_VOLUME,650);
+  }catch{
+    music.textContent="Bật nhạc";
+  }
+}
+
+function keepBackgroundRunningWithRecordedVoice(){
+  if(!bgmWasPlayingBeforeVoice || !bgm || !bgm.paused || bgmManuallyPaused) return;
+  bgm.play().then(()=>{
+    music.textContent="Tắt nhạc";
+    fadeAudioTo(bgm,BGM_VOICE_VOLUME,180);
+  }).catch(()=>{});
+}
+
 async function startBackgroundMusicSoftly(){
   if(!bgm || !bgm.paused) return true;
 
   try{
-    bgm.volume=0;
+    bgmManuallyPaused=false;
+    const recordedVoicePlaying=typeof voice!=="undefined" && !voice.paused && !voice.ended;
+    const targetVolume=recordedVoicePlaying ? BGM_VOICE_VOLUME : BGM_NORMAL_VOLUME;
+    if(recordedVoicePlaying) ensureBgmWebAudioMixer(BGM_VOICE_VOLUME);
+    if(bgmGainNode){
+      bgm.volume=1;
+      bgmGainNode.gain.value=0;
+    }else{
+      bgm.volume=0;
+    }
     await bgm.play();
-    fadeAudioTo(bgm,BGM_NORMAL_VOLUME,MOBILE_LITE?650:1200);
+    fadeAudioTo(bgm,targetVolume,MOBILE_LITE?650:1200);
     music.textContent="Tắt nhạc";
     return true;
   }catch{
-    bgm.volume=BGM_NORMAL_VOLUME;
+    if(bgmGainNode){
+      bgm.volume=1;
+      bgmGainNode.gain.value=BGM_NORMAL_VOLUME;
+    }else{
+      bgm.volume=BGM_NORMAL_VOLUME;
+    }
     return false;
   }
 }
@@ -8971,9 +9082,11 @@ async function startBackgroundMusicSoftly(){
 music.onclick=async()=>{
   try{
     if(bgm.paused){
+      bgmManuallyPaused=false;
       const started=await startBackgroundMusicSoftly();
       if(!started) music.textContent="Chưa có file nhạc";
     }else{
+      bgmManuallyPaused=true;
       fadeAudioTo(bgm,0,450,{pauseAtEnd:true});
       music.textContent="Bật nhạc";
     }
@@ -9521,15 +9634,10 @@ async function toggleVoicePlayback(){
 
   try{
     if(voice.paused){
-      bgmWasPlayingBeforeVoice=!bgm.paused;
-      bgmVolumeBeforeVoice=bgm.volume || BGM_NORMAL_VOLUME;
-
-      if(bgmWasPlayingBeforeVoice){
-        fadeAudioTo(bgm,BGM_VOICE_VOLUME,420);
-      }
-
+      ensureVoiceWebAudioMixer();
+      duckBackgroundForRecordedVoice();
       voice.muted=false;
-      voice.volume=1;
+      voice.volume=voiceGainNode ? 1 : VOICE_PLAYBACK_VOLUME;
       if(voice.ended) voice.currentTime=0;
       if(voice.networkState===HTMLMediaElement.NETWORK_EMPTY) voice.load();
       await voice.play();
@@ -9539,6 +9647,7 @@ async function toggleVoicePlayback(){
     }
     syncVoiceUI();
   }catch{
+    restoreBackgroundAfterRecordedVoice();
     setVoiceStatus("Trình duyệt chưa phát được đoạn ghi âm này.","error");
   }
 }
@@ -9574,6 +9683,10 @@ voice.addEventListener("error",()=>{
 voice.addEventListener("timeupdate",updateVoiceProgress);
 
 voice.addEventListener("play",()=>{
+  ensureVoiceWebAudioMixer();
+  duckBackgroundForRecordedVoice();
+  keepBackgroundRunningWithRecordedVoice();
+  setTimeout(keepBackgroundRunningWithRecordedVoice,160);
   setVoiceStatus("Đang phát lời chúc của anh.","ready");
   syncVoiceUI();
 });
@@ -9583,9 +9696,7 @@ voice.addEventListener("pause",()=>{
     setVoiceStatus("Đã tạm dừng. Em có thể nghe tiếp bất cứ lúc nào.","ready");
   }
 
-  if(bgmWasPlayingBeforeVoice && !bgm.paused){
-    fadeAudioTo(bgm,Math.max(BGM_NORMAL_VOLUME,bgmVolumeBeforeVoice),650);
-  }
+  restoreBackgroundAfterRecordedVoice();
 
   syncVoiceUI();
 });
@@ -9593,9 +9704,7 @@ voice.addEventListener("pause",()=>{
 voice.addEventListener("ended",()=>{
   setVoiceStatus("Anh vẫn ở đây. Bé có thể mở nghe lại bất cứ lúc nào.","ready");
 
-  if(bgmWasPlayingBeforeVoice && !bgm.paused){
-    fadeAudioTo(bgm,Math.max(BGM_NORMAL_VOLUME,bgmVolumeBeforeVoice),800);
-  }
+  restoreBackgroundAfterRecordedVoice();
 
   syncVoiceUI();
 });
@@ -10046,7 +10155,8 @@ openLetterButton.onclick=()=>{
   envelopeIsOpening=true;
 
   if(!bgm.paused){
-    fadeAudioTo(bgm,BGM_LETTER_VOLUME,700);
+    ensureBgmWebAudioMixer(BGM_NORMAL_VOLUME);
+    fadeAudioTo(bgm,BGM_LETTER_VOLUME,260);
     setTimeout(()=>{
       if(voice.paused && !bgm.paused){
         fadeAudioTo(bgm,BGM_NORMAL_VOLUME,1400);
