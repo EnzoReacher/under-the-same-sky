@@ -1,8 +1,0 @@
-PRIVATE VOICE NOTE
-
-Original recording: Jag älskar dig.m4a
-Processed master: mono MP3, 44.1 kHz, 96 kbps
-Target loudness: approximately -17.5 LUFS
-True peak: approximately -1.8 dBTP
-
-The processed recording is embedded directly in index.html.
